@@ -1,0 +1,34 @@
+This project is a simple parallel file analyzer written in Python.
+It scans a selected directory, collects basic information about all files, and prints summary statistics.
+The program uses threading because file scanning is I/O-bound (disk operations), so threads are efficient and easy to use.
+
+Features:
+---------
+- parallel scanning using multiple threads
+- producer–consumer architecture with a queue
+- collects file size, path and extension
+
+prints:
+--------
+- total number of files
+- total size
+- top 10 largest files
+- extension statistics (count and total size)
+
+Structure:
+--------------
+conf/config.py – folder to scan and number of workers
+src/producer.py – finds files
+src/worker.py – processes files in threads
+src/analyzer.py – calculates results
+src/main.py – runs everything
+tests/ – simple unit tests
+
+HOW TO RUN!!!
+__________________
+Open file "conf/config.py"
+- in this file you can edit the file you want to analyze and how many workers you have
+
+Start the program
+- open terminal
+- run: python -m src.main

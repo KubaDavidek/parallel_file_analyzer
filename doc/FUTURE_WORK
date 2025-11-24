@@ -1,0 +1,7 @@
+This is the first version of the project.
+Below are possible improvements for the next iteration:
+
+- add progress bar during scanning
+- export results to CSV or JSON
+- logging to a file
+- detecting duplicates
