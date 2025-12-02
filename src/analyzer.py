@@ -1,5 +1,7 @@
 import os
-import re
+from lib.duplicate_finder import find_duplicates_by_hash
+
+
 
 TEMP_FOLDERS = [
     os.path.join(os.getenv("USERPROFILE"), "AppData", "Local", "Temp"),
@@ -50,43 +52,20 @@ def analyze_files(results):
     print()
 
 
-def normalize_name(name):
-    base, ext = os.path.splitext(name)
-    base = re.sub(r"\(\d+\)", "", base)
-    base = re.sub(r"(?i)\s*copy", "", base)
-    base = re.sub(r"(?i)\s*kopie", "", base)
-    base = re.sub(r"(?i)- copy", "", base)
-    return base.strip() + ext
+def analyze_duplicates_by_hash(results):
+    print("\n===== DUPLICITY PODLE HASH =====")
+    print("--------------------------------")
 
+    dupes = find_duplicates_by_hash(results)
 
-def analyze_duplicates(results):
-    print("\n===== CHYTRÉ DUPLICITY =====")
-    print("-----------------------------")
-
-    name_groups = {}
-
-    for path, size, ext in results:
-        filename = os.path.basename(path)
-        normalized = normalize_name(filename)
-
-        if normalized not in name_groups:
-            name_groups[normalized] = []
-        name_groups[normalized].append((path, size))
-
-    real_dupes = {k: v for k, v in name_groups.items() if len(v) > 1}
-
-    if not real_dupes:
-        print("Žádné duplicitní názvy nenalezeny.\n")
+    if not dupes:
+        print("Žádné duplicity nenalezeny.\n")
         return
 
-    for name, files in real_dupes.items():
-        print(f"\n{name} ({len(files)} souborů):")
-
-        total = sum(s for _, s in files)
-        print(f"  Celková velikost: {total/1024/1024:.2f} MB")
-
-        for p, s in files:
-            print(f"  - {os.path.basename(p)} ({s/1024/1024:.2f} MB)")
+    for h, paths in dupes.items():
+        print(f"\nHash: {h[:16]}... ({len(paths)} souborů)")
+        for p in paths:
+            print(f"  - {p}")
     print()
 
 def analyze_temp():

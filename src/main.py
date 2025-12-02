@@ -5,13 +5,13 @@ from queue import Queue
 from conf.config import ROOT_FOLDER, NUM_WORKERS
 from src.producer import producer
 from src.worker import worker
-from src.analyzer import analyze_files, analyze_duplicates, analyze_temp
+from src.analyzer import analyze_files, analyze_duplicates_by_hash, analyze_temp
 
 
 def main():
     print("\nVyberte akci:")
     print("1) Analýza souborů")
-    print("2) Chytré duplicity")
+    print("2) Duplicity")
     print("3) TEMP analýza")
 
     choice = input("\nZadejte volbu (1–3): ")
@@ -47,7 +47,7 @@ def main():
     if choice == "1":
         analyze_files(results)
     elif choice == "2":
-        analyze_duplicates(results)
+        analyze_duplicates_by_hash(results)
     else:
         print("Neplatná volba.")
 
